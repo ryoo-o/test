@@ -1,1 +1,6 @@
-
+const $=s=>document.querySelector(s);
+function showAccount(){location.hash="account";$("#ranks").classList.add("hidden");$("#account").classList.remove("hidden")}
+function showHome(){location.hash="";$("#account").classList.add("hidden");$("#ranks").classList.remove("hidden")}
+function showToast(msg){const t=$("#toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",2600)}
+if(location.hash==="#account")showAccount();
+$("#searchForm").addEventListener("submit",async e=>{e.preventDefault();$("#error").textContent="";try{const r=await fetch("data/users.json",{cache:"no-store"});const d=await r.json();const q=$("#username").value.trim().toLowerCase();const u=d.users.find(x=>x.username.toLowerCase()===q);if(!u){$("#profile").classList.add("hidden");$("#error").textContent="No Gacha Heaven account found with that username.";return}$("#avatar").textContent=u.avatar||"👤";$("#name").textContent=u.username;$("#bio").textContent=u.bio||"Gacha Heaven member";$("#discordId").textContent=u.discordId||"Not set";$("#rank").textContent=u.rank||"Member";$("#created").textContent=u.createdAt||"Unknown";$("#profile").classList.remove("hidden")}catch(err){$("#error").textContent="Could not load data/users.json. On GitHub Pages it will load normally."}});
