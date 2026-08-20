@@ -1,1 +1,20 @@
-
+{
+  "users": [
+    {
+      "username": "CatCross",
+      "discordId": "123456789012345678",
+      "rank": "Owner",
+      "createdAt": "2026-08-21",
+      "avatar": "\ud83c\udfb2",
+      "bio": "Gacha Heaven Owner"
+    },
+    {
+      "username": "ExampleMember",
+      "discordId": "987654321098765432",
+      "rank": "Member",
+      "createdAt": "2026-08-01",
+      "avatar": "\u2728",
+      "bio": "Welcome to Gacha Heaven!"
+    }
+  ]
+}
