@@ -1,6 +1,195 @@
-const $=s=>document.querySelector(s);
-function showAccount(){location.hash="account";$("#ranks").classList.add("hidden");$("#account").classList.remove("hidden")}
-function showHome(){location.hash="";$("#account").classList.add("hidden");$("#ranks").classList.remove("hidden")}
-function showToast(msg){const t=$("#toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",2600)}
-if(location.hash==="#account")showAccount();
-$("#searchForm").addEventListener("submit",async e=>{e.preventDefault();$("#error").textContent="";try{const r=await fetch("data/users.json",{cache:"no-store"});const d=await r.json();const q=$("#username").value.trim().toLowerCase();const u=d.users.find(x=>x.username.toLowerCase()===q);if(!u){$("#profile").classList.add("hidden");$("#error").textContent="No Gacha Heaven account found with that username.";return}$("#avatar").textContent=u.avatar||"👤";$("#name").textContent=u.username;$("#bio").textContent=u.bio||"Gacha Heaven member";$("#discordId").textContent=u.discordId||"Not set";$("#rank").textContent=u.rank||"Member";$("#created").textContent=u.createdAt||"Unknown";$("#profile").classList.remove("hidden")}catch(err){$("#error").textContent="Could not load data/users.json. On GitHub Pages it will load normally."}});
+const $ = selector => document.querySelector(selector);
+
+
+/*
+|--------------------------------------------------------------------------
+| SHOW ACCOUNT PAGE
+|--------------------------------------------------------------------------
+*/
+
+function showAccount() {
+
+    location.hash = "account";
+
+    $("#ranks").classList.add("hidden");
+
+    $("#account").classList.remove("hidden");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GO BACK HOME
+|--------------------------------------------------------------------------
+*/
+
+function showHome() {
+
+    location.hash = "";
+
+    $("#account").classList.add("hidden");
+
+    $("#ranks").classList.remove("hidden");
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TOAST MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+function showToast(message) {
+
+    const toast = $("#toast");
+
+    toast.textContent = message;
+
+    toast.style.display = "block";
+
+    setTimeout(() => {
+
+        toast.style.display = "none";
+
+    }, 2600);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| OPEN ACCOUNT PAGE IF URL HAS #account
+|--------------------------------------------------------------------------
+*/
+
+if (location.hash === "#account") {
+
+    showAccount();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ACCOUNT SEARCH
+|--------------------------------------------------------------------------
+*/
+
+$("#searchForm").addEventListener(
+    "submit",
+
+    async event => {
+
+        event.preventDefault();
+
+
+        $("#error").textContent = "";
+
+
+        try {
+
+            const response = await fetch(
+                "data/users.json",
+
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            const username = $("#username")
+                .value
+                .trim()
+                .toLowerCase();
+
+
+            const user = data.users.find(
+
+                account =>
+
+                    account.username
+                        .toLowerCase() === username
+
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | USER NOT FOUND
+            |--------------------------------------------------------------------------
+            */
+
+            if (!user) {
+
+                $("#profile")
+                    .classList
+                    .add("hidden");
+
+
+                $("#error").textContent =
+
+                    "No Gacha Heaven account found with that username.";
+
+                return;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SHOW USER
+            |--------------------------------------------------------------------------
+            */
+
+            $("#avatar").textContent =
+
+                user.avatar || "👤";
+
+
+            $("#name").textContent =
+
+                user.username;
+
+
+            $("#bio").textContent =
+
+                user.bio || "Gacha Heaven member";
+
+
+            $("#discordId").textContent =
+
+                user.discordId || "Not set";
+
+
+            $("#rank").textContent =
+
+                user.rank || "Member";
+
+
+            $("#created").textContent =
+
+                user.createdAt || "Unknown";
+
+
+            $("#profile")
+                .classList
+                .remove("hidden");
+
+
+        }
+
+        catch (error) {
+
+            $("#error").textContent =
+
+                "Could not load data/users.json. On GitHub Pages it will load normally.";
+
+        }
+
+    }
+);
