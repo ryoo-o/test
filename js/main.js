@@ -1,195 +1,53 @@
-const $ = selector => document.querySelector(selector);
+const $=s=>document.querySelector(s);
 
-
-/*
-|--------------------------------------------------------------------------
-| SHOW ACCOUNT PAGE
-|--------------------------------------------------------------------------
-*/
-
-function showAccount() {
-
-    location.hash = "account";
-
+function showAccount(){
+    location.hash="account";
     $("#ranks").classList.add("hidden");
-
     $("#account").classList.remove("hidden");
-
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| GO BACK HOME
-|--------------------------------------------------------------------------
-*/
-
-function showHome() {
-
-    location.hash = "";
-
+function showHome(){
+    location.hash="";
     $("#account").classList.add("hidden");
-
     $("#ranks").classList.remove("hidden");
-
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| TOAST MESSAGE
-|--------------------------------------------------------------------------
-*/
-
-function showToast(message) {
-
-    const toast = $("#toast");
-
-    toast.textContent = message;
-
-    toast.style.display = "block";
-
-    setTimeout(() => {
-
-        toast.style.display = "none";
-
-    }, 2600);
-
+function showToast(message){
+    const toast=$("#toast");
+    toast.textContent=message;
+    toast.style.display="block";
+    setTimeout(()=>toast.style.display="none",2600);
 }
 
+if(location.hash==="#account")showAccount();
 
-/*
-|--------------------------------------------------------------------------
-| OPEN ACCOUNT PAGE IF URL HAS #account
-|--------------------------------------------------------------------------
-*/
+$("#searchForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    $("#error").textContent="";
 
-if (location.hash === "#account") {
+    try{
+        const response=await fetch("data/users.json",{cache:"no-store"});
+        const data=await response.json();
+        const username=$("#username").value.trim().toLowerCase();
 
-    showAccount();
+        const user=data.users.find(account=>
+            account.username.toLowerCase()===username
+        );
 
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| ACCOUNT SEARCH
-|--------------------------------------------------------------------------
-*/
-
-$("#searchForm").addEventListener(
-    "submit",
-
-    async event => {
-
-        event.preventDefault();
-
-
-        $("#error").textContent = "";
-
-
-        try {
-
-            const response = await fetch(
-                "data/users.json",
-
-                {
-                    cache: "no-store"
-                }
-            );
-
-
-            const data = await response.json();
-
-
-            const username = $("#username")
-                .value
-                .trim()
-                .toLowerCase();
-
-
-            const user = data.users.find(
-
-                account =>
-
-                    account.username
-                        .toLowerCase() === username
-
-            );
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | USER NOT FOUND
-            |--------------------------------------------------------------------------
-            */
-
-            if (!user) {
-
-                $("#profile")
-                    .classList
-                    .add("hidden");
-
-
-                $("#error").textContent =
-
-                    "No Gacha Heaven account found with that username.";
-
-                return;
-
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | SHOW USER
-            |--------------------------------------------------------------------------
-            */
-
-            $("#avatar").textContent =
-
-                user.avatar || "👤";
-
-
-            $("#name").textContent =
-
-                user.username;
-
-
-            $("#bio").textContent =
-
-                user.bio || "Gacha Heaven member";
-
-
-            $("#discordId").textContent =
-
-                user.discordId || "Not set";
-
-
-            $("#rank").textContent =
-
-                user.rank || "Member";
-
-
-            $("#created").textContent =
-
-                user.createdAt || "Unknown";
-
-
-            $("#profile")
-                .classList
-                .remove("hidden");
-
-
+        if(!user){
+            $("#profile").classList.add("hidden");
+            $("#error").textContent="No Gacha Heaven account found with that username.";
+            return;
         }
 
-        catch (error) {
-
-            $("#error").textContent =
-
-                "Could not load data/users.json. On GitHub Pages it will load normally.";
-
-        }
-
+        $("#avatar").textContent=user.avatar||"👤";
+        $("#name").textContent=user.username;
+        $("#bio").textContent=user.bio||"Gacha Heaven member";
+        $("#discordId").textContent=user.discordId||"Not set";
+        $("#rank").textContent=user.rank||"Member";
+        $("#created").textContent=user.createdAt||"Unknown";
+        $("#profile").classList.remove("hidden");
+    }catch(error){
+        $("#error").textContent="Could not load data/users.json. On GitHub Pages it will load normally.";
     }
-);
+});
